@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footstep Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-green-500 p-4 text-center">
+        <h1 class="text-white text-2xl font-bold">Footstep Tracker</h1>
+    </nav>
+
+    <!-- Footstep Tracking Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-8">Track Your Steps</h2>
+            <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8">
+                <p class="text-gray-700 mb-4">Click the button below to start tracking your footsteps.</p>
+                
+                <button onclick="startTracking()" class="w-full px-4 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">
+                    Start Tracking
+                </button>
+                
+                <div id="stepResults" class="mt-8 hidden">
+                    <h3 class="text-xl font-bold">Steps Counted: <span id="stepCount">0</span></h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let stepCount = 0;
+        let tracking = false;
+
+        function startTracking() {
+            if (!('DeviceMotionEvent' in window)) {
+                alert('Step tracking is not supported on this device.');
+                return;
+            }
+
+            if (!tracking) {
+                tracking = true;
+                window.addEventListener('devicemotion', countSteps);
+                document.getElementById('stepResults').classList.remove('hidden');
+            }
+        }
+
+        function countSteps(event) {
+            const acceleration = event.accelerationIncludingGravity;
+            const threshold = 12; // Adjust sensitivity
+            
+            if (acceleration && Math.abs(acceleration.x) + Math.abs(acceleration.y) + Math.abs(acceleration.z) > threshold) {
+                stepCount++;
+                document.getElementById('stepCount').innerText = stepCount;
+            }
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-green-500 text-white text-center py-4">
+        <p>&copy; 2025 Footstep Tracker. All rights reserved.</p>
+    </footer>
+</body>
+</html>
